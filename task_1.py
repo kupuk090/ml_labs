@@ -216,14 +216,14 @@ def task_5a(model):
     y_pred = [dif_test  for _, dif_test  in sorted(zip(model.x_test, dif_test ))]
     x_pred = sorted(model.y_pred_test)
     plt.scatter(x_pred, y_pred)
-    plt.savefig('task5/lin_test.png')
+    plt.savefig('task5_lin_test.png')
     plt.show()
     plt.clf()
 
     y_pred = [dif_train for _, dif_train in sorted(zip(model.x_train, dif_train))]
     x_pred = sorted(model.y_pred_train)
     plt.scatter(x_pred, y_pred)
-    plt.savefig('task5/lin_train.png')
+    plt.savefig('task5_lin_train.png')
     plt.show()
     plt.clf()
 
@@ -235,7 +235,8 @@ def main():
     #task_2('data_v1-05.csv')
 
     path = 'data_v1-05.csv'
-    task_2(path)
+    task4(path)
+    task5(path)
 '''
     model = RegressionModel(path)
     model.new_train_test_split()
