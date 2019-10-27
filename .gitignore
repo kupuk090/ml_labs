@@ -2,6 +2,9 @@
 #*.csv
 /*.xml
 
+*.png
+*.pptx
+
 venv/
 .idea/
 

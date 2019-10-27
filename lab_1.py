@@ -130,6 +130,8 @@ def task_1(model: Lab1, max_regressors: int, lmbd_b: float, lmbd_c: float):
         ax.xaxis.set_minor_locator(MultipleLocator(1))
         ax.set_xlim(0, len(data[0].x) + 1)
 
+        # ax.set_yscale('log')
+
         lines = []
         for k in data:
             lines.append(ax.plot(k.x, k.y, color=k.color, marker=k.marker, label=k.label)[0])
@@ -150,6 +152,11 @@ def task_1(model: Lab1, max_regressors: int, lmbd_b: float, lmbd_c: float):
         draw_plots(title='Линейная регрессия', data=(
             mse_tpl(np.array(range(1, max_regressors)), mse_train, 'b', '.', 'Обучающая выборка'),
             mse_tpl(np.array(range(1, max_regressors)), mse_test, 'r', '.', 'Тестовая выборка')))
+        draw_plots(title='Линейная регрессия', data=(
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_train[:len(mse_train) // 2], 'b', '.',
+                    'Обучающая выборка'),
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_test[:len(mse_train) // 2], 'r', '.',
+                    'Тестовая выборка')))
         model.clean()
 
     def task_1b():
@@ -165,6 +172,11 @@ def task_1(model: Lab1, max_regressors: int, lmbd_b: float, lmbd_c: float):
         draw_plots(title='Гребневая регрессия при ' + r'$\lambda \approx 0$', data=(
             mse_tpl(np.array(range(1, max_regressors)), mse_train, 'b', '.', 'Обучающая выборка'),
             mse_tpl(np.array(range(1, max_regressors)), mse_test, 'r', '.', 'Тестовая выборка')))
+        draw_plots(title='Гребневая регрессия при ' + r'$\lambda \approx 0$', data=(
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_train[:len(mse_train) // 2], 'b', '.',
+                    'Обучающая выборка'),
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_test[:len(mse_train) // 2], 'r', '.',
+                    'Тестовая выборка')))
         model.clean()
 
     def task_1c():
@@ -180,6 +192,11 @@ def task_1(model: Lab1, max_regressors: int, lmbd_b: float, lmbd_c: float):
         draw_plots(title='Гребневая регрессия при ' + r'$\lambda \gg 0$', data=(
             mse_tpl(np.array(range(1, max_regressors)), mse_train, 'b', '.', 'Обучающая выборка'),
             mse_tpl(np.array(range(1, max_regressors)), mse_test, 'r', '.', 'Тестовая выборка')))
+        draw_plots(title='Гребневая регрессия при ' + r'$\lambda \gg 0$', data=(
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_train[:len(mse_train) // 2], 'b', '.',
+                    'Обучающая выборка'),
+            mse_tpl(np.array(range(1, max_regressors // 2)), mse_test[:len(mse_train) // 2], 'r', '.',
+                    'Тестовая выборка')))
         model.clean()
 
     task_1a()
@@ -210,11 +227,14 @@ def task_3(model: Lab1, m: int, lmbd_min: float, lmbd_max: float, lmbd_step: flo
         rm = model.ridge_regression(m, l)
         coef_matrix[curr_row, 0] = rm.intercept_
         coef_matrix[curr_row, 1:] = rm.coef_
+        curr_row += 1
 
     _, ax = plt.subplots()
     ax.grid()
     ax.set_title('Зависимость коэффициентов гребневой регрессии от ' + r'$\lambda$ ' + r'$(m = {})$'.format(m))
     ax.set_xlabel(r'$\lambda$')
+    ax.set_xscale('log')
+    # ax.set_yscale('log')
     ax.set_ylabel('Значения коэффициентов')
 
     lines = []
@@ -231,8 +251,13 @@ def task_4(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
         _, ax = plt.subplots()
         ax.grid()
         ax.set_title(title)
-        # ax.set_xlabel('Моделируемые значения входной переменной')
-        # ax.set_ylabel('Остатки')
+        ax.set_ylabel('Частота значения')
+        ax.set_xlabel('Значение дисперсии')
+
+        ax.xaxis.set_major_locator(MultipleLocator(0.01))
+        ax.xaxis.set_minor_locator(MultipleLocator(0.001))
+        ax.yaxis.set_major_locator(MultipleLocator(10))
+        ax.yaxis.set_minor_locator(MultipleLocator(2))
 
         ax.hist(data.x, color=data.color, label=data.label, bins=data.bins, ec='k')
         plt.legend()
@@ -320,11 +345,11 @@ def task_4(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
 
 
 def task_5(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
-    def draw_plots(title: str, data: tuple):
+    def draw_plots(title: str, data: tuple, xlabel: str):
         _, ax = plt.subplots()
         ax.grid()
         ax.set_title(title)
-        ax.set_xlabel('Моделируемые значения входной переменной')
+        ax.set_xlabel(xlabel)
         ax.set_ylabel('Остатки')
 
         lines = []
@@ -342,10 +367,13 @@ def task_5(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
 
         draw_plots(title='Остатки линейной регрессии', data=(
             tpl(model.x_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='x')
         draw_plots(title='Остатки линейной регрессии', data=(
             tpl(model.y_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='y')
+        print(diff_test.mean())
         model.clean()
 
     def task_5b():
@@ -357,10 +385,13 @@ def task_5(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
 
         draw_plots(title='Остатки гребневой регрессии при ' + r'$\lambda \approx 0$', data=(
             tpl(model.x_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='x')
         draw_plots(title='Остатки гребневой регрессии при ' + r'$\lambda \approx 0$', data=(
             tpl(model.y_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='y')
+        print(diff_test.mean())
         model.clean()
 
     def task_5c():
@@ -372,10 +403,13 @@ def task_5(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
 
         draw_plots(title='Остатки гребневой регрессии  при ' + r'$\lambda \gg 0$', data=(
             tpl(model.x_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.x_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='x')
         draw_plots(title='Остатки гребневой регрессии  при ' + r'$\lambda \gg 0$', data=(
             tpl(model.y_train, diff_train, 'b', '.', 'Обучающая выборка'),
-            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')))
+            tpl(model.y_test, diff_test, 'r', '.', 'Тестовая выборка')),
+                   xlabel='y')
+        print(diff_test.mean())
         model.clean()
 
     task_5a()
@@ -384,10 +418,9 @@ def task_5(model: Lab1, m: int, lmbd_b: float, lmbd_c: float):
 
 
 test = Lab1('data_v1-04.csv')
-test.linear_regression(1)
-# data_representation(test)
-# task_1(test, 50, 0.01, 10)
-# task_2(test, 5, 0.01, 10)
-# task_3(test, 5, 0.001, 1, 0.005)
-# task_5(test, 5, 0.001, 1)
-task_4(test, 5, 0.001, 1)
+data_representation(test)
+task_1(test, 50, 0.001, 100)
+task_2(test, 5, 0.001, 100)
+task_3(test, 5, 0.001, 100, 0.5)
+task_5(test, 5, 0.001, 100)
+task_4(test, 5, 0.001, 100)
