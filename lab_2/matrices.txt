@@ -1,0 +1,26 @@
+ACCURACY
+            Cov matrix     Train      Test
+       Shared & Scalar  0.740000  0.706667
+     Shared & Diagonal  0.754286  0.700000
+   Not shared & Scalar  0.754286  0.706667
+ Not shared & Diagonal  0.765714  0.700000
+                Shared  0.751429  0.720000
+        No assumptions  0.748571  0.733333
+
+PRECISION-RECALL
+            Cov matrix  Train Micro  Train Macro  Test Micro  Test Macro
+       Shared & Scalar     0.808220     0.781474    0.770882    0.751629
+     Shared & Diagonal     0.815201     0.788141    0.772247    0.753060
+   Not shared & Scalar     0.816342     0.784941    0.768996    0.749234
+ Not shared & Diagonal     0.822011     0.791757    0.779322    0.756784
+                Shared     0.832675     0.817676    0.802511    0.785315
+        No assumptions     0.838896     0.826301    0.810513    0.792284
+
+ROC
+            Cov matrix  Train Micro  Train Macro  Test Micro  Test Macro
+       Shared & Scalar     0.922860     0.913251    0.906356    0.894694
+     Shared & Diagonal     0.925597     0.915685    0.906667    0.895260
+   Not shared & Scalar     0.924362     0.914929    0.904133    0.892986
+ Not shared & Diagonal     0.929097     0.918793    0.913067    0.901710
+                Shared     0.933004     0.925625    0.919852    0.910040
+        No assumptions     0.937556     0.930029    0.929644    0.920279
